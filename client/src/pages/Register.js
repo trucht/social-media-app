@@ -1,26 +1,28 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Form, Button } from 'semantic-ui-react';
 import { gql } from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import { useNavigate } from 'react-router-dom';
 
+import { AuthContext } from '../context/auth';
+import { useForm } from '../util/hooks'
+
 const Register = (props) => {
+  const context = useContext(AuthContext);
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
-  const [values, setValues] = useState({
+
+  const { onChange, onSubmit, values } = useForm(registerUser, {
     username: '',
     email: '',
     password: '',
     confirmPassword: ''
-  })
+  });
 
-  const onChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value })
-  }
 
   const [addUser, { loading }] = useMutation(REGISTER_MUTATION, {
-    update(_, result) {
-      console.log(result);
+    update(_, { data: { register: userData } }) {
+      context.login(userData);
       navigate('/');
     },
     onError(err) {
@@ -33,8 +35,7 @@ const Register = (props) => {
     variables: values
   })
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+  function registerUser() {
     addUser();
   }
 
@@ -68,7 +69,7 @@ const Register = (props) => {
           onChange={onChange} />
         <Form.Input
           type="password"
-          label="Confirm assword"
+          label="Confirm Password"
           placeholder="Confirm Password..."
           name="confirmPassword"
           value={values.confirmPassword}
