@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { Grid, GridColumn } from 'semantic-ui-react';
+import { Grid, GridColumn, Transition } from 'semantic-ui-react';
 
 import { AuthContext } from '../context/auth';
 import PostCard from '../components/PostCard';
@@ -19,12 +19,10 @@ const Home = () => {
     return <div>Error fetching data</div>;
   }
 
-  // Check if the data object and getPosts property exist
   if (!data || !data.getPosts) {
     return <div>No data or getPosts found</div>;
   }
 
-  // Now you can safely access the posts array
   const { getPosts: posts } = data;
 
   return (
@@ -40,13 +38,16 @@ const Home = () => {
                 <PostForm />
               </GridColumn>
             )}
-          {posts.map(post => {
-            return (
-              <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                <PostCard post={post} />
-              </Grid.Column>
-            )
-          })}
+          <Transition.Group>
+            {posts
+              && posts.map(post => {
+                return (
+                  <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
+                    <PostCard post={post} />
+                  </Grid.Column>
+                )
+              })}
+          </Transition.Group>
         </Grid.Row>
       </Grid>
     </main>

@@ -1,17 +1,15 @@
-import React from 'react';
-import { Card, Image, Button } from 'semantic-ui-react';
 import moment from 'moment';
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { Button, Card, Image } from 'semantic-ui-react';
+import { AuthContext } from '../context/auth';
+import LikeButton from './LikeButton';
 
-const PostCard = ({ post: { id, username, body, createdAt, likeCount, commentCount } }) => {
- const likePost = () => {
-  console.log("Hú")
- }
+const PostCard = ({ post: { id, username, body, createdAt, likeCount, commentCount, likes } }) => {
 
- const commentOnPost = () => {
-  console.log("Hú")
- }
- 
+ const { user } = useContext(AuthContext);
+
+
  return (
   <Card fluid>
    <Card.Content>
@@ -27,22 +25,26 @@ const PostCard = ({ post: { id, username, body, createdAt, likeCount, commentCou
    </Card.Content>
    <Card.Content extra>
     <div>
-     <Button
-      basic
-      color='teal'
-      content='Like'
-      icon='heart'
-      label={{ basic: true, color: 'teal', pointing: 'left', content: likeCount }}
-      onClick={likePost}
-     />
+     <LikeButton user={user} post={{ id, likes, likeCount }} />
      <Button
       basic
       color='blue'
       content='Like'
       icon='comment'
       label={{ basic: true, color: 'blue', pointing: 'left', content: commentCount }}
-      onClick={commentOnPost}
+      as={Link}
+      to={`/posts/${id}`}
      />
+     {user && user.username === username && (
+      <Button
+       basic
+       color="red"
+       icon="trash"
+       onClick={() => { console.log("hú") }}
+      >
+
+      </Button>
+     )}
     </div>
    </Card.Content>
   </Card >
