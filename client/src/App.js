@@ -11,6 +11,7 @@ import AuthRoute from './util/AuthRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import SinglePost from './pages/SinglePost';
 
 import MenuBar from './components/MenuBar';
 
@@ -28,6 +29,7 @@ function App() {
             <Route exact element={<AuthRoute />}>
               <Route exact path="/login" element={<Login />} />
             </Route>
+            <Route exact path='/posts/:postId' element={<SinglePost />} />
           </Routes>
         </Container>
       </Router>

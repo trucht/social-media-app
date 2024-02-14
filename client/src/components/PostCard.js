@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Card, Image } from 'semantic-ui-react';
 import { AuthContext } from '../context/auth';
 import LikeButton from './LikeButton';
+import DeleteButton from './DeleteButton';
 
 const PostCard = ({ post: { id, username, body, createdAt, likeCount, commentCount, likes } }) => {
 
@@ -29,21 +30,13 @@ const PostCard = ({ post: { id, username, body, createdAt, likeCount, commentCou
      <Button
       basic
       color='blue'
-      content='Like'
       icon='comment'
       label={{ basic: true, color: 'blue', pointing: 'left', content: commentCount }}
       as={Link}
       to={`/posts/${id}`}
      />
      {user && user.username === username && (
-      <Button
-       basic
-       color="red"
-       icon="trash"
-       onClick={() => { console.log("hú") }}
-      >
-
-      </Button>
+      <DeleteButton postId={id} />
      )}
     </div>
    </Card.Content>
